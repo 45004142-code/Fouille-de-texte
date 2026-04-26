@@ -6,6 +6,7 @@ Projet de classification automatique de commentaires IMDb en trois polarités :
 ## Prérequis
 
 pip install pandas scikit-learn spacy
+
 python -m spacy download en_core_web_sm
 
 ## Structure du projet
