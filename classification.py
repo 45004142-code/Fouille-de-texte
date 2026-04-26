@@ -75,6 +75,22 @@ y_pred_dt = dt.predict(X_test_tfidf)
 print("=== Decision Tree (J48) ===")
 print(classification_report(y_test, y_pred_dt))
 
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
+import matplotlib.pyplot as plt
+
+feature_names = vectorizer.get_feature_names_out().tolist() 
+print(export_text(dt, feature_names=feature_names, max_depth=3))
+
+plt.figure(figsize=(30, 15))
+plot_tree(dt, 
+          feature_names=feature_names,
+          class_names=["moyen", "negatif", "positif"],
+          filled=True,
+          max_depth=2,  
+          fontsize=12)
+plt.savefig("arbre_decision.png", dpi=150, bbox_inches='tight')
+plt.show()
+
 # ------------------------------------------------
 # 3c. Régression Logistique
 # ------------------------------------------------
