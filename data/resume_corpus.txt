@@ -1,0 +1,19 @@
+Corpus IMDb Twilight
+
+Total reviews (après nettoyage) : 2906
+Train : 2324 | Test : 582
+
+Distribution globale des labels :
+label
+moyen      1249
+negatif     898
+positif     759
+
+Distribution par film :
+label   moyen  negatif  positif
+film                           
+film_1    398      459      276
+film_2    232      138       47
+film_3    354      109      153
+film_4    158      129      159
+film_5    107       63      124

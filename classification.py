@@ -9,13 +9,10 @@ Labels : positif / moyen / negatif
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.svm import LinearSVC, SVC
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import Normalizer
+from sklearn.svm import LinearSVC
 from sklearn.metrics import classification_report
-import numpy as np
-import os
 
 # ================================================
 # 1. CHARGEMENT DES DONNÉES
@@ -66,21 +63,34 @@ print("\n=== Naive Bayes ===")
 print(classification_report(y_test, y_pred_nb))
 
 # ------------------------------------------------
-# 3b. Régression Logistique
+# 3b. J48 (Decision Tree)
 # ------------------------------------------------
 # Modèle linéaire qui prédit la probabilité d'appartenance à chaque classe.
 # class_weight='balanced' : compense le déséquilibre entre les classes
-#   (positif sous-représenté vs moyen surreprésenté)
+
+dt = DecisionTreeClassifier(class_weight='balanced')
+dt.fit(X_train_tfidf, y_train)
+y_pred_dt = dt.predict(X_test_tfidf)
+
+print("=== Decision Tree (J48) ===")
+print(classification_report(y_test, y_pred_dt))
+
+# ------------------------------------------------
+# 3c. Régression Logistique
+# ------------------------------------------------
+# Modèle linéaire qui prédit la probabilité d'appartenance à chaque classe.
+# class_weight='balanced' : compense le déséquilibre entre les classes.
+# max_iter=1000 : augmente le nombre d'itérations pour assurer la convergence.
 
 lr = LogisticRegression(max_iter=1000, class_weight='balanced')
 lr.fit(X_train_tfidf, y_train)
 y_pred_lr = lr.predict(X_test_tfidf)
 
-print("\n=== Logistic Regression ===")
+print("\n=== Régression Logistique ===")
 print(classification_report(y_test, y_pred_lr))
 
 # ------------------------------------------------
-# 3c. SVM Linéaire
+# 3d. SVM Linéaire
 # ------------------------------------------------
 # Trouve la frontière de décision qui maximise la marge entre les classes.
 
@@ -90,16 +100,3 @@ y_pred_svm = svm.predict(X_test_tfidf)
 
 print("\n=== SVM Linéaire ===")
 print(classification_report(y_test, y_pred_svm))
-
-# ------------------------------------------------
-# 3d. SVM avec noyau RBF (Kernel Trick)
-# ------------------------------------------------
-svc_rbf = make_pipeline(
-    Normalizer(),
-    SVC(kernel='rbf', class_weight='balanced')
-)
-svc_rbf.fit(X_train_tfidf, y_train)
-y_pred_rbf = svc_rbf.predict(X_test_tfidf)
-
-print("\n=== SVM RBF Kernel ===")
-print(classification_report(y_test, y_pred_rbf))
